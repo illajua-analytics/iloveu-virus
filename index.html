@@ -106,10 +106,13 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" autoplay loop>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" loop>
     <source src="Dilaw - Maki (Official Lyric Video).mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Cheer Sound -->
   <audio id="cheerSound">
     <source src="CROWD CHEER SOUND EFFECT.mp3" type="audio/mpeg">
   </audio>
@@ -138,6 +141,15 @@
   </div>
 
   <script>
+    const bgMusic = document.getElementById('bgMusic');
+    const cheer = document.getElementById('cheerSound');
+
+    // Start music after first interaction (autoplay fix)
+    document.addEventListener("click", function startMusic() {
+      bgMusic.play().catch(() => {});
+      document.removeEventListener("click", startMusic);
+    });
+
     // Floating hearts
     const heartEmojis = ['❤️','💖','💗','💘','💕','💞'];
     setInterval(() => {
@@ -167,8 +179,8 @@
       document.getElementById('noMessage').style.display = 'none';
       document.getElementById('yesMessage').style.display = 'block';
 
-      // Play cheering sound
-      const cheer = document.getElementById('cheerSound');
+      // Restart cheer if clicked again
+      cheer.currentTime = 0;
       cheer.play();
     }
 
@@ -176,5 +188,6 @@
       document.getElementById('noMessage').style.display = 'block';
     }
   </script>
+
 </body>
 </html>
