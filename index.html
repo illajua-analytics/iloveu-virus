@@ -2,41 +2,65 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Heart Catch Game 💖</title>
+<title>Catch My Heart 💖</title>
+
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #ff6fa5, #ffb6c1);
+  height: 100vh;
   color: white;
+  text-align: center;
 }
 
+/* Score Display */
 #scoreBoard {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
+  background: rgba(255, 0, 100, 0.7);
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.6);
 }
 
+/* Floating background emojis */
+.floating {
+  position: absolute;
+  font-size: 30px;
+  animation: floatUp 10s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(-10vh); }
+}
+
+/* Moving heart */
 #heart {
   position: absolute;
-  font-size: 80px;
+  font-size: 90px;
   cursor: pointer;
   transition: transform 0.2s;
 }
 
+/* Compliment */
 #compliment {
   position: fixed;
   bottom: 20px;
   width: 100%;
   font-size: 20px;
-  min-height: 30px;
+  font-weight: bold;
+  text-shadow: 0 0 10px white;
 }
 
+/* Valentine popup */
 .hidden {
   display: none;
 }
@@ -47,15 +71,14 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  color: #ff4b6e;
+  color: #ff3b7f;
   padding: 30px;
   border-radius: 20px;
-  text-align: center;
   box-shadow: 0 0 30px rgba(0,0,0,0.2);
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   margin: 10px;
   border-radius: 10px;
   border: none;
@@ -64,7 +87,7 @@ button {
 }
 
 #yesBtn {
-  background: #ff4b6e;
+  background: #ff3b7f;
   color: white;
 }
 
@@ -72,29 +95,30 @@ button {
   background: #ccc;
 }
 
-.celebrate {
+/* Celebration burst */
+.burst {
   position: fixed;
   font-size: 30px;
-  animation: floatUp 2s linear forwards;
+  animation: burstUp 2s forwards;
 }
 
-@keyframes floatUp {
+@keyframes burstUp {
   0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-200px); opacity: 0; }
+  100% { transform: translateY(-150px); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div id="scoreBoard">Score: 0 / 25</div>
-<div id="heart">💖</div>
+<div id="scoreBoard">Score: 0 / 25 💖</div>
+<div id="heart">💘</div>
 <div id="compliment"></div>
 
 <div id="valentineBox" class="hidden">
   <h2>Will you be my Valentine? 💌</h2>
-  <button id="yesBtn">YES 💘</button>
-  <button id="noBtn">No 😢</button>
+  <button id="yesBtn">YES 💞</button>
+  <button id="noBtn">No 😅</button>
 </div>
 
 <script>
@@ -108,67 +132,75 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
 const compliments = [
-  "You’re the cutest human alive 😘",
-  "My favorite notification is you 💕",
-  "You make my world brighter ✨",
-  "My heart chose you 💖",
-  "Your smile > everything 😍",
-  "Elite taste? That’s me choosing you 😌",
-  "You’re literally my favorite person 🥰",
-  "You + Me = Perfect combo 💞",
-  "I would click this heart forever for you 😚",
-  "You make life 100x better 💗"
+  "You’re my favorite person in the universe 😘",
+  "Your smile melts me 💖",
+  "I’d choose you every lifetime 💕",
+  "You’re my daily dose of happiness ✨",
+  "You make everything better 🥰",
+  "Certified girlfriend of the year 🏆",
+  "My heart literally chose you 💘",
+  "Life upgrade unlocked when I met you 🎉",
+  "You're sweeter than chocolate 🍫",
+  "You are my best decision 😌"
 ];
 
+/* Move heart randomly */
 function moveHeart() {
   const maxX = window.innerWidth - 100;
   const maxY = window.innerHeight - 100;
-  const randomX = Math.random() * maxX;
-  const randomY = Math.random() * maxY;
-  heart.style.left = randomX + "px";
-  heart.style.top = randomY + "px";
+  heart.style.left = Math.random() * maxX + "px";
+  heart.style.top = Math.random() * maxY + "px";
 }
 
-function burstEffect(x, y) {
-  const emoji = document.createElement("div");
-  emoji.innerText = "💖";
-  emoji.classList.add("celebrate");
-  emoji.style.left = x + "px";
-  emoji.style.top = y + "px";
-  document.body.appendChild(emoji);
-  setTimeout(() => emoji.remove(), 2000);
+/* Background floating emojis */
+function createFloating() {
+  const emojis = ["💖", "😘", "🍫", "🎂"];
+  const float = document.createElement("div");
+  float.classList.add("floating");
+  float.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+  float.style.left = Math.random() * 100 + "vw";
+  float.style.animationDuration = (8 + Math.random() * 5) + "s";
+  document.body.appendChild(float);
+  setTimeout(() => float.remove(), 12000);
 }
 
+setInterval(createFloating, 500);
+
+/* Click heart */
 heart.addEventListener("click", (e) => {
   score++;
-  scoreBoard.innerText = `Score: ${score} / ${target}`;
+  scoreBoard.innerText = `Score: ${score} / ${target} 💖`;
   compliment.innerText = compliments[Math.floor(Math.random() * compliments.length)];
   
-  burstEffect(e.clientX, e.clientY);
+  const burst = document.createElement("div");
+  burst.classList.add("burst");
+  burst.innerText = "💖";
+  burst.style.left = e.clientX + "px";
+  burst.style.top = e.clientY + "px";
+  document.body.appendChild(burst);
+  setTimeout(() => burst.remove(), 2000);
+
   moveHeart();
 
   if (score >= target) {
-    heart.classList.add("hidden");
+    heart.style.display = "none";
     valentineBox.classList.remove("hidden");
   }
 });
 
-// Make heart move automatically every 1.5 sec
 setInterval(moveHeart, 1500);
 moveHeart();
 
-// NO button runs away
+/* NO button runs away */
 noBtn.addEventListener("mouseover", () => {
-  const maxX = window.innerWidth - 100;
-  const maxY = window.innerHeight - 100;
   noBtn.style.position = "absolute";
-  noBtn.style.left = Math.random() * maxX + "px";
-  noBtn.style.top = Math.random() * maxY + "px";
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
 });
 
-// YES button
+/* YES button */
 yesBtn.addEventListener("click", () => {
-  valentineBox.innerHTML = "<h2>YAY!!! 💖🥳 I love you!!! 💘</h2>";
+  valentineBox.innerHTML = "<h2>YAAAY!!! 💖🥳 I love you so much!!! 💘</h2>";
 });
 </script>
 
